@@ -1,0 +1,15 @@
+CFS (which is default scheduler for processes) has no fixed timeslice, it is calculated at runtime depending of targeted latency (sysctl_sched_latency) and number of running processes. Timeslice could never be less than minimum granularity (sysctl_sched_min_granularity).
+
+Timeslice will be always between sysctl_sched_min_granularity and sysctl_sched_latency, which are defaults to 0.75 ms and 6 ms respectively and defined in kernel/sched/fair.c.
+
+# echo 100 > /proc/sys/kernel/sched_rr_timeslice_ms
+# cat /proc/sys/kernel/sched_rr_timeslice_ms
+10
+
+Differences from Linux
+Feature	Linux (CFS)	Windows
+Time Quantum	Virtual runtime–based, not fixed slices	Fixed-length quantum per thread
+Fairness Model	Tries to give equal runtime	Strict priority preemption
+Priorities	Nice values + CFS weights (dynamic)	32 levels, real-time + dynamic
+Tuning	More control via /proc/sysfs	Less transparent; mostly internal
+
